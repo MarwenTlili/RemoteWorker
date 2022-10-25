@@ -2,6 +2,7 @@ version: "3.4"
 
 services:
   php:
+    container_name: remote_worker-php
     build:
       context: ./api
       target: app_php
@@ -24,6 +25,7 @@ services:
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
 
   pwa:
+    container_name: remote_worker-pwa
     build:
       context: ./pwa
       target: prod
@@ -31,6 +33,7 @@ services:
       NEXT_PUBLIC_ENTRYPOINT: http://caddy
 
   caddy:
+    container_name: remote_worker-caddy
     build:
       context: api/
       target: app_caddy
@@ -63,6 +66,7 @@ services:
 
 ###> doctrine/doctrine-bundle ###
   database:
+    container_name: remote_worker-database
     image: postgres:${POSTGRES_VERSION:-14}-alpine
     environment:
       - POSTGRES_DB=${POSTGRES_DB:-app}
@@ -70,9 +74,9 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-!ChangeMe!}
       - POSTGRES_USER=${POSTGRES_USER:-app}
     volumes:
-      - db_data:/var/lib/postgresql/data
+      # - db_data:/var/lib/postgresql/data
       # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./api/docker/db/data:/var/lib/postgresql/data
+      - ./api/docker/db/data:/var/lib/postgresql/data
 ###< doctrine/doctrine-bundle ###
 
 # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
@@ -84,7 +88,7 @@ volumes:
   caddy_data:
   caddy_config:
 ###> doctrine/doctrine-bundle ###
-  db_data:
+  # db_data:
 ###< doctrine/doctrine-bundle ###
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
