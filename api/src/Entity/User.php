@@ -16,7 +16,7 @@ use ApiPlatform\Metadata\ApiResource;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy:"IDENTITY")]
     #[ORM\Column]
     private ?int $id = null;
 
@@ -25,18 +25,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column]
     #[Assert\NotBlank]
     private ?string $username = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type:"simple_array")]
+    #[ApiProperty(
+        jsonldContext: [
+            '@type' => 'http://www.w3.org/2001/XMLSchema#array',
+        ]
+    )]
     #[Assert\Json]
-    #[Assert\NotNull]
-    #[Assert\Json]
-    #[Assert\Choice(['ROLE_ADMIN', 'ROLE_CLIENT', 'ROLE_ENGINEER', 'ROLE_UNDEFINED'])]
-    // #[ApiProperty(
-
-    // )]
     private array $roles = [];
 
     /**
@@ -92,7 +91,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_UNDEFINED';
+        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }

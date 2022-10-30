@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Quote
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy:"IDENTITY")]
     #[ORM\Column]
     private ?int $id = null;
 
@@ -103,7 +103,7 @@ class Quote
 
         return $this;
     }
-    
+
     public function getEngineer(): ?Engineer
     {
         return $this->engineer;
