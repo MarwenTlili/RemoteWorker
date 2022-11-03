@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiProperty;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,6 +16,8 @@ use ApiPlatform\Metadata\ApiResource;
 #[ApiResource]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    const roleChoices = [['ROLE_ADMIN'], ['ROLE_ENGINEER'], ['ROLE_CLIENT']];
+
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy:"IDENTITY")]
     #[ORM\Column]
@@ -31,13 +32,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     private ?string $username = null;
 
-    #[ORM\Column(type:"simple_array")]
-    #[ApiProperty(
-        jsonldContext: [
-            '@type' => 'http://www.w3.org/2001/XMLSchema#array',
-        ]
-    )]
-    #[Assert\Json]
+    #[ORM\Column(type: 'json')]
+    #[Assert\Choice(choices: User::roleChoices)]
     private array $roles = [];
 
     /**
@@ -101,13 +97,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        if (empty($roles)) {
+            $roles[] = 'ROLE_UNDEFINED';
+        }
 
         return array_unique($roles);
     }
 
     public function setRoles(array $roles): self
     {
+        if (empty($roles)) {
+            $roles[] = ["ROLE_UNDEFINED"];
+        }
         $this->roles = $roles;
 
         return $this;
