@@ -1,6 +1,0 @@
-App\Entity\User:
-    user_{1..1}:
-        email: <email()>
-        username: <name()>
-        roles: <['ROLE_CLIENT']>
-        password: <password()>
