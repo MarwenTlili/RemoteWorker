@@ -9,4 +9,9 @@ api_platform:
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
         route_prefix: 'api'
+    swagger:
+         api_keys:
+             JWT:
+                name: Authorization
+                type: header
     
