@@ -1,5 +1,10 @@
 App\Entity\User:
-    user_{1..10}:
+    user_1:
+        email: admin@example.com
+        username: admin
+        roles: ["ROLE_ADMIN"]
+        password: '\$2y\$13\$1Yat6DdVVoER5V6xntkf/O4b2CNFb6j5w2YNsiuZGcdKQ09PjuTiO'
+    user_{2..10}:
         email: <email()>
         username: <username()>
         roles: <randomElements(['ROLE_ADMIN','ROLE_ENGINEER','ROLE_CLIENT'], 1)>
