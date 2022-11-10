@@ -21,7 +21,7 @@ export const List: FunctionComponent<Props> = ({ users }) => (
           <th>id</th>
           <th>email</th>
           <th>username</th>
-          <th>roles</th>
+          {/* <th>roles</th> */}
           <th>password</th>
           <th>userIdentifier</th>
           <th />
