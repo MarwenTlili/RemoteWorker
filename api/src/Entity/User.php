@@ -14,7 +14,7 @@ use ApiPlatform\Metadata\ApiResource;
 #[ApiResource]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    const roleChoices = [['ROLE_ADMIN'], ['ROLE_ENGINEER'], ['ROLE_CLIENT']];
+    // const roleChoices = [['ROLE_ADMIN'], ['ROLE_ENGINEER'], ['ROLE_CLIENT']];
 
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy:"IDENTITY")]
@@ -31,7 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;
 
     #[ORM\Column(type: 'json')]
-    #[Assert\Choice(choices: User::roleChoices)]
+    // #[Assert\Choice(choices: User::roleChoices)]
     private array $roles = [];
 
     /**
