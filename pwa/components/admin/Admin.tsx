@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { SetStateAction, useContext, useState} from "react";
-import {Navigate} from "react-router-dom";
 import {
   Layout,
   LayoutProps,
@@ -15,7 +14,6 @@ import {
   hydraDataProvider as baseHydraDataProvider,
   OpenApiAdmin,
   ResourceGuesser,
-  useIntrospection,
 } from "@api-platform/admin";
 import {parseHydraDocumentation} from "@api-platform/api-doc-parser";
 import {LoginForm} from "./LoginForm";
@@ -33,15 +31,7 @@ const fetchHydra = (url: URL, options = {}) =>
     // @ts-ignore
     headers: getHeaders,
   });
-const RedirectToLogin = () => {
-  const introspect = useIntrospection();
 
-  if (localStorage.getItem("token")) {
-    introspect();
-    return <></>;
-  }
-  return <Navigate to="/login"/>;
-};
 const apiDocumentationParser = (setRedirectToLogin: (arg0: boolean) => void) => async () => {
   try {
     setRedirectToLogin(false);
