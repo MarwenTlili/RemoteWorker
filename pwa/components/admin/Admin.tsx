@@ -16,6 +16,7 @@ import {
   ResourceGuesser,
 } from "@api-platform/admin";
 import {parseHydraDocumentation} from "@api-platform/api-doc-parser";
+import AppBar from "./AppBar";
 import {LoginForm} from "./LoginForm";
 import DocContext from "./DocContext";
 import authProvider from "../../utils/authProvider";
@@ -80,6 +81,7 @@ const LoginPage = () => (
 
 const CustomLayout = (props: JSX.IntrinsicAttributes & LayoutProps) => <Layout
   {...props}
+  appBar={AppBar}
 />;
 
 const AdminUI = () => {
