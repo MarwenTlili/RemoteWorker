@@ -9,9 +9,19 @@ api_platform:
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
         route_prefix: 'api'
+        pagination_enabled: true
+        pagination_client_enabled: true
+        # pagination_items_per_page: 10 # Default value
+        pagination_client_items_per_page: true
+        pagination_maximum_items_per_page: 50
     swagger:
          api_keys:
              JWT:
                 name: Authorization
                 type: header
-    
+    collection:
+        pagination:
+            page_parameter_name: page
+            # enable/disable pagination from client (?pagination=false)
+            # enabled_parameter_name: pagination # optional
+            items_per_page_parameter_name: itemsPerPage # Default value
