@@ -4,8 +4,8 @@ App\Entity\User:
         username: admin
         roles: ["ROLE_ADMIN"]
         password: '\$2y\$13\$1Yat6DdVVoER5V6xntkf/O4b2CNFb6j5w2YNsiuZGcdKQ09PjuTiO'
-    user_{2..10}:
+    user_{2..201}:
         email: <email()>
         username: <username()>
-        roles: <randomElements(['ROLE_ADMIN','ROLE_ENGINEER','ROLE_CLIENT'], 1)>
+        roles: <randomElements(['ROLE_ENGINEER','ROLE_CLIENT'], 1)>
         password: <password()>
