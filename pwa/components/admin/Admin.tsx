@@ -1,31 +1,28 @@
 import Head from "next/head";
 import { SetStateAction, useContext, useState} from "react";
-import {Navigate, Route} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import {
-  CustomRoutes,
   Layout,
   LayoutProps,
   localStorageStore,
   Login,
   LoginClasses,
-  resolveBrowserLocale,
+  Resource,
 } from "react-admin";
-// import polyglotI18nProvider from "ra-i18n-polyglot";
-// import englishMessages from "ra-language-english";
-// import frenchMessages from "ra-language-french";
 import {
   fetchHydra as baseFetchHydra,
   HydraAdmin,
   hydraDataProvider as baseHydraDataProvider,
   OpenApiAdmin,
+  ResourceGuesser,
   useIntrospection,
 } from "@api-platform/admin";
 import {parseHydraDocumentation} from "@api-platform/api-doc-parser";
-// import AppBar from "./AppBar";
 import {LoginForm} from "./LoginForm";
 import DocContext from "./DocContext";
 import authProvider from "../../utils/authProvider";
 import {ENTRYPOINT} from "../../config/entrypoint";
+import users from "./users";
 
 const getHeaders = () => localStorage.getItem("token") ? {
   Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -78,16 +75,6 @@ const dataProvider = (setRedirectToLogin: { (value: SetStateAction<boolean>): vo
   apiDocumentationParser: apiDocumentationParser(setRedirectToLogin),
 });
 
-// const messages = {
-//   fr: frenchMessages,
-//   en: englishMessages,
-// };
-// const i18nProvider = polyglotI18nProvider(
-//   // @ts-ignore
-//   (locale) => (messages[locale] ? messages[locale] : messages.en),
-//   resolveBrowserLocale(),
-// );
-
 const LoginPage = () => (
   <Login
     sx={{
@@ -101,9 +88,8 @@ const LoginPage = () => (
   </Login>
 );
 
-const MyLayout = (props: JSX.IntrinsicAttributes & LayoutProps) => <Layout
+const CustomLayout = (props: JSX.IntrinsicAttributes & LayoutProps) => <Layout
   {...props}
-  // appBar={AppBar}
 />;
 
 const AdminUI = () => {
@@ -115,20 +101,25 @@ const AdminUI = () => {
       dataProvider={dataProvider(setRedirectToLogin)}
       authProvider={authProvider}
       entrypoint={window.origin}
-      // i18nProvider={i18nProvider}
-      layout={MyLayout}
+      layout={CustomLayout}
       loginPage={LoginPage}>
-      <CustomRoutes>
-        {redirectToLogin ? <Route path="/" element={<RedirectToLogin />} /> : null}
-      </CustomRoutes>
+      <Resource name={"api/users"} {...users}/>
+      <ResourceGuesser name={"api/certifications"} />
+      <ResourceGuesser name={"api/clients"} />
+      <ResourceGuesser name={"api/domains"} />
+      <ResourceGuesser name={"api/engineers"} />
+      <ResourceGuesser name={"api/experiences"} />
+      <ResourceGuesser name={"api/missions"} />
+      <ResourceGuesser name={"api/quotes"} />
+      <ResourceGuesser name={"api/studies"} />
+      <ResourceGuesser name={"api/sub_domains"} />
     </HydraAdmin>
   ) : (
     <OpenApiAdmin
       authProvider={authProvider}
       entrypoint={window.origin}
       docEntrypoint={`${window.origin}/docs.json`}
-      // i18nProvider={i18nProvider}
-      layout={MyLayout}
+      layout={CustomLayout}
       loginPage={LoginPage}
     />
   );
@@ -152,14 +143,13 @@ const AdminWithContext = () => {
   );
 };
 
-const Admin = () => (
+const AdminApp = () => (
   <>
     <Head>
       <title>API Platform Admin</title>
     </Head>
-
     <AdminWithContext />
   </>
-);
+)
 
-export default Admin;
+export default AdminApp;
