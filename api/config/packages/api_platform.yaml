@@ -25,3 +25,4 @@ api_platform:
             # enable/disable pagination from client (?pagination=false)
             # enabled_parameter_name: pagination # optional
             items_per_page_parameter_name: itemsPerPage # Default value
+        order_parameter_name: 'order'

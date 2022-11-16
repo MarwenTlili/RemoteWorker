@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -12,6 +14,13 @@ use ApiPlatform\Metadata\ApiResource;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource]
+#[
+    ApiFilter(
+        OrderFilter::class,
+        properties: ['username' => 'ASC', 'email'=> 'ASC'],
+        arguments: ['orderParameterName' => 'order']
+    )
+]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     // const roleChoices = [['ROLE_ADMIN'], ['ROLE_ENGINEER'], ['ROLE_CLIENT']];
