@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,6 +20,14 @@ use ApiPlatform\Metadata\ApiResource;
         OrderFilter::class,
         properties: ['username' => 'ASC', 'email'=> 'ASC'],
         arguments: ['orderParameterName' => 'order']
+    ),
+    ApiFilter(
+        SearchFilter::class,
+        properties: [
+            'id' => SearchFilter::STRATEGY_EXACT,
+            'username' => SearchFilter::STRATEGY_PARTIAL,
+            'email' => SearchFilter::STRATEGY_PARTIAL,
+        ]
     )
 ]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
