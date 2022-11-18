@@ -1,8 +1,9 @@
 import { UserCreate } from "./UserCreate";
-import { UserList } from "./UserList";
+import UserList from "./UserList";
 
-export default {
+const resource = {
   list: UserList,
   create: UserCreate
 }
 
+export default resource;
