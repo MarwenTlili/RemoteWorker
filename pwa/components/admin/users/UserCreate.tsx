@@ -9,8 +9,8 @@ import {
 export const UserCreate = (props: any) => (
   <Create {...props}>
     <SimpleForm>
-      <TextInput source="email" defaultValue="engineer3@example.com"/>
-      <TextInput source="username" defaultValue="engineer3"/>
+      <TextInput source="email" defaultValue=""/>
+      <TextInput source="username" defaultValue=""/>
       <TextField />
       {/* <InputGuesser source="roles" /> */}
       <AutocompleteArrayInput
@@ -27,7 +27,7 @@ export const UserCreate = (props: any) => (
           <TextInput source="roles"/>
         </SimpleFormIterator>
       </ArrayInput> */}
-      <TextInput source="password" defaultValue="engineer3"/>
+      <TextInput source="password" defaultValue=""/>
     </SimpleForm>
   </Create>
 )

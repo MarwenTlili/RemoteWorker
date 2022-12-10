@@ -22,6 +22,8 @@ import DocContext from "./DocContext";
 import authProvider from "../../utils/authProvider";
 import {ENTRYPOINT} from "../../config/entrypoint";
 import users from "./users";
+import Dashboard from "./Dashboard";
+import NotFound from "./NotFound";
 
 const getHeaders = () => localStorage.getItem("token") ? {
   Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -94,17 +96,21 @@ const AdminUI = () => {
       authProvider={authProvider}
       entrypoint={window.origin}
       layout={CustomLayout}
-      loginPage={LoginPage}>
-      <Resource name={"api/users"} {...users}/>
-      <ResourceGuesser name={"api/certifications"} />
-      <ResourceGuesser name={"api/clients"} />
-      <ResourceGuesser name={"api/domains"} />
-      <ResourceGuesser name={"api/engineers"} />
-      <ResourceGuesser name={"api/experiences"} />
-      <ResourceGuesser name={"api/missions"} />
-      <ResourceGuesser name={"api/quotes"} />
-      <ResourceGuesser name={"api/studies"} />
-      <ResourceGuesser name={"api/sub_domains"} />
+      loginPage={LoginPage}
+      dashboard={Dashboard}
+      catchAll={NotFound}
+    >
+      <Resource name={"api/users"} options={{ label: 'Users' }} {...users} />
+      {/* <Resource name={"api/users"} list={UserList} /> */}
+      <ResourceGuesser name={"api/certifications"} options={{ label: "Certifications" }} />
+      <ResourceGuesser name={"api/clients"} options={{ label: "Clients" }}  />
+      <ResourceGuesser name={"api/domains"} options={{ label: "Domains" }} />
+      <ResourceGuesser name={"api/engineers"} options={{ label: "Engineers" }} />
+      <ResourceGuesser name={"api/experiences"} options={{ label: "Experiences" }} />
+      <ResourceGuesser name={"api/missions"} options={{ label: "Missions" }} />
+      <ResourceGuesser name={"api/quotes"} options={{ label: "Quotes" }} />
+      <ResourceGuesser name={"api/studies"} options={{ label: "Studies" }} />
+      <ResourceGuesser name={"api/sub_domains"} options={{ label: "Sub Domains" }} />
     </HydraAdmin>
   ) : (
     <OpenApiAdmin
