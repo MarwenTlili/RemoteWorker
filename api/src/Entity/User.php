@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Metadata\ApiResource;
+use App\Filter\MultipleFieldsSearch;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -18,7 +19,7 @@ use ApiPlatform\Metadata\ApiResource;
 #[
     ApiFilter(
         OrderFilter::class,
-        properties: ['username' => 'ASC', 'email'=> 'ASC'],
+        properties: ['username' => 'ASC', 'email'=> 'ASC', 'roles' => 'ASC'],
         arguments: ['orderParameterName' => 'order']
     ),
     ApiFilter(
@@ -27,11 +28,14 @@ use ApiPlatform\Metadata\ApiResource;
             'id' => SearchFilter::STRATEGY_EXACT,
             'username' => SearchFilter::STRATEGY_PARTIAL,
             'email' => SearchFilter::STRATEGY_PARTIAL,
-        ]
+        ],
+    ),
+    ApiFilter(
+        MultipleFieldsSearch::class,
+        properties: ["username", "email"]
     )
 ]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
-{
+class User implements UserInterface, PasswordAuthenticatedUserInterface{
     // const roleChoices = [['ROLE_ADMIN'], ['ROLE_ENGINEER'], ['ROLE_CLIENT']];
 
     #[ORM\Id]
