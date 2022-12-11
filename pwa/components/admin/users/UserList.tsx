@@ -15,9 +15,10 @@ import {
   SelectColumnsButton,
   EditButton,
   ShowButton,
+  useRecordContext,
 } from "react-admin";
 import { User } from "../types";
-import { useMediaQuery } from '@mui/material';
+import { useMediaQuery, Typography } from '@mui/material';
 
 const userFilters = [
   <SearchInput source="q" alwaysOn />,
@@ -49,6 +50,29 @@ const ListToolbar = () => {
   )
 }
 
+const RolesField = (props: any) => {
+  const record = useRecordContext(props);
+  return (
+    record ?
+    <>
+      {record.roles.map((role: any) => {
+        switch (role) {
+          case "ROLE_ADMIN":
+            return <Typography key={role} color="red">admin </Typography>;
+          case "ROLE_CLIENT":
+            return <Typography key={role} color="blue">client </Typography>;
+          case "ROLE_ENGINEER":
+            return <Typography key={role} color="orange">engineer </Typography>;
+          default:
+            return <Typography key={0} color="error">UNDEFINED </Typography>;
+        }
+      })}
+    </>
+    : null
+  )
+};
+RolesField.defaultProps = { label: 'Roles' };
+
 const UserListContent = () => {
   const {
     data: users,
@@ -62,7 +86,7 @@ const UserListContent = () => {
     <DatagridConfigurable>
       <TextField source="username"/>
       <TextField source="email"/>
-      <TextField source="roles" sortable={false}/>
+      <RolesField source="roles" />
       <EditButton label="edit" />
       <ShowButton label="show" />
     </DatagridConfigurable>
