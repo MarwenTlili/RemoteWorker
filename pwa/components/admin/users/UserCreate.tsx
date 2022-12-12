@@ -12,7 +12,6 @@ export const UserCreate = (props: any) => (
       <TextInput source="email" defaultValue=""/>
       <TextInput source="username" defaultValue=""/>
       <TextField />
-      {/* <InputGuesser source="roles" /> */}
       <AutocompleteArrayInput
         source="roles"
         choices={[
