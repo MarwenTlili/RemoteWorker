@@ -11,11 +11,30 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Filter\MultipleFieldsSearch;
+use App\State\UserPasswordHasher;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new Post(processor: UserPasswordHasher::class),
+        new Get(),
+        new Put(processor: UserPasswordHasher::class),
+        new Patch(processor: UserPasswordHasher::class),
+        new Delete(),
+    ],
+    normalizationContext: ['groups' => ['user:read']],
+    denormalizationContext: ['groups' => ['user:create', 'user:update']],
+)]
 #[
     ApiFilter(
         OrderFilter::class,
@@ -35,37 +54,44 @@ use App\Filter\MultipleFieldsSearch;
         properties: ["username", "email"]
     )
 ]
+#[ORM\Table(name: '`user`')]
+#[UniqueEntity('email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface{
     // const roleChoices = [['ROLE_ADMIN'], ['ROLE_ENGINEER'], ['ROLE_CLIENT']];
 
+    #[Groups(['user:read'])]
     #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy:"IDENTITY")]
-    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
     #[Assert\Email]
     #[Assert\NotBlank]
+    #[Groups(['user:read', 'user:create', 'user:update'])]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column]
     #[Assert\NotBlank]
+    #[Groups(['user:read', 'user:create', 'user:update'])]
     private ?string $username = null;
 
     #[ORM\Column(type: 'json')]
-    // #[Assert\Choice(choices: User::roleChoices)]
+    #[Groups(['user:read', 'user:create', 'user:update'])]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Assert\NotBlank]
+    #[Groups(['user:read', 'user:create', 'user:update'])]
     private ?string $password = null;
 
-    public function __construct()
-    {
-    }
+    #[Assert\NotBlank(groups: ['user:create'])]
+    #[Groups(['user:create', 'user:update'])]
+    private ?string $plainPassword = null;
+
+    public function __construct(){}
 
     public function getId(): ?int
     {
@@ -145,12 +171,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface{
         return $this;
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $painPassword): self
+    {
+        $this->plainPassword = $painPassword;
+
+        return $this;
+    }
+
     /**
      * @see UserInterface
      */
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 }
