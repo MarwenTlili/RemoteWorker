@@ -22,12 +22,7 @@ export const UserCreate = (props: any) => (
         ]}
       >
       </AutocompleteArrayInput>
-      {/* <ArrayInput  {...props}>
-        <SimpleFormIterator>
-          <TextInput source="roles"/>
-        </SimpleFormIterator>
-      </ArrayInput> */}
-      <TextInput source="password" defaultValue=""/>
+      <TextInput source="plainPassword" defaultValue=""/>
     </SimpleForm>
   </Create>
 )
