@@ -108,6 +108,7 @@ const UserList = () => {
             primaryText={<TextField source="username" />}
             secondaryText={record => record.email}
             tertiaryText={record => record.roles}
+            linkType="show"
           />
         ) : (
           <UserListContent />
