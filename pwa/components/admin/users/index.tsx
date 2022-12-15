@@ -1,12 +1,12 @@
-import { EditGuesser } from "@api-platform/admin";
 import { UserCreate } from "./UserCreate";
+import { UserEdit } from "./UserEdit";
 import UserList from "./UserList";
 import { UserShow } from "./UserShow";
 
 const resource = {
   list: UserList,
   create: UserCreate,
-  edit: EditGuesser,
+  edit: UserEdit,
   show: UserShow
 }
 
