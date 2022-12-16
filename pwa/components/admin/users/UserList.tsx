@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   CreateButton,
   DatagridConfigurable,
@@ -18,7 +19,12 @@ import {
   useRecordContext,
 } from "react-admin";
 import { User } from "../types";
-import { useMediaQuery, Typography } from '@mui/material';
+import {
+  useMediaQuery,
+  Typography,
+} from '@mui/material';
+import EmailIcon from '@mui/icons-material/Email';
+import Person from '@mui/icons-material/Person';
 
 const userFilters = [
   <SearchInput source="q" alwaysOn />,
@@ -99,15 +105,34 @@ const UserList = () => {
   const isMedium = useMediaQuery((theme: any) => theme.breakpoints.down('md'));
   const isDesktop = useMediaQuery((theme: any) => theme.breakpoints.up('md'));
 
+  const customRoles = (roles: any) => {
+    return (
+      <>
+        {roles.map((role: any) => {
+          switch (role) {
+            case "ROLE_ADMIN":
+              return <Typography key={role} variant='body2' color="red" >admin </Typography>;
+            case "ROLE_CLIENT":
+              return <Typography key={role} variant='body2' color="blue">client </Typography>;
+            case "ROLE_ENGINEER":
+              return <Typography key={role} variant='body2' color="orange">engineer </Typography>;
+            default:
+              return <Typography key={0} variant='body2' color="error">UNDEFINED </Typography>;
+          }
+        })}
+      </>
+    )
+  }
+
   return (
     <List actions={false} title="List of Users">
       <>
         <ListToolbar />
         {isMedium ? (
           <SimpleList
-            primaryText={<TextField source="username" />}
-            secondaryText={record => record.email}
-            tertiaryText={record => record.roles}
+            primaryText={<> <Person sx={{ color:"primary" }} /><TextField source="username" /> </>}
+            secondaryText={record => ( <> <EmailIcon sx={{ color:"gray" }} /> {record.email} </> )}
+            tertiaryText={record => customRoles(record.roles)}
             linkType="show"
           />
         ) : (
